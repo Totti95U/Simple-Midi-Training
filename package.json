@@ -1,0 +1,27 @@
+{
+    "name": "midi-training-app",
+    "version": "1.0.0",
+    "description": "The simple web-app for ear training on midi keyboard.",
+    "homepage": "https://github.com/Totti95U/Simple-Midi-Training#readme",
+    "bugs": {
+        "url": "https://github.com/Totti95U/Simple-Midi-Training/issues"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Totti95U/Simple-Midi-Training.git"
+    },
+    "license": "Unlicense",
+    "author": "ToTTi",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "dev": "npx http-server ./public -p 5173",
+        "ai": "gemini run"
+    },
+    "devDependencies": {
+        "http-server": "^14.1.1"
+    },
+    "dependencies": {
+        "keytar": "^7.9.0"
+    }
+}
