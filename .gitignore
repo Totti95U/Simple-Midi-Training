@@ -1,0 +1,27 @@
+
+# dependencies
+/node_modules
+
+# misc
+/.DS_Store
+/npm-debug.log*
+/yarn-debug.log*
+/yarn-error.log*
+
+# production
+/build
+/dist
+
+# local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# gemini config
+gemini.config.json
+
+# lockfile
+package-lock.json
+
