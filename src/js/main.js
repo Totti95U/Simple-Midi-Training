@@ -133,6 +133,11 @@ newMelodyBtn.addEventListener('click', newMelody);
 resetBtn.addEventListener('click', reset);
 
 // 初期化
-initAudio();
-initMIDI();
-newMelody();
+async function initialize() {
+    initAudio();
+    initMIDI();
+    await loadPianoSample(); // ピアノサンプルを読み込む（完了を待つ）
+    newMelody();
+}
+
+initialize();
