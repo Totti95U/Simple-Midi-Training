@@ -106,6 +106,54 @@ h1 {
     border-color: #667eea;
 }
 
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 10px;
+    background: white;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.checkbox-label:hover {
+    border-color: #667eea;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: #667eea;
+}
+
+.checkbox-label span {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.9em;
+}
+
+.sidebar-section {
+    margin-bottom: 20px;
+}
+
+.sidebar-section h3 {
+    color: #333;
+    font-size: 1.1em;
+    margin: 0 0 15px 0;
+}
+
+.sidebar-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+    background: #f5f5f5;
+    border-radius: 10px;
+}
+
 .key-selection {
     padding: 20px;
     background: #f5f5f5;
@@ -120,7 +168,62 @@ h1 {
 .key-selection-header h3 {
     color: #333;
     font-size: 1.1em;
-    margin: 0 0 12px 0;
+    margin: 0 0 15px 0;
+}
+
+.scale-preset {
+    margin-bottom: 15px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border: 2px solid #ddd;
+}
+
+.scale-preset-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.setting-group-inline {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.setting-group-inline label {
+    font-weight: bold;
+    color: #555;
+    font-size: 0.85em;
+}
+
+.setting-group-inline select {
+    padding: 8px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 0.9em;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s;
+}
+
+.setting-group-inline select:hover {
+    border-color: #667eea;
+}
+
+.setting-group-inline select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.btn-preset {
+    width: 100%;
+    background: #4CAF50 !important;
+}
+
+.btn-preset:hover {
+    background: #45a049 !important;
 }
 
 .key-selection-controls {
