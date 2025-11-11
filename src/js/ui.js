@@ -1,10 +1,31 @@
 // メロディ表示を更新
 function updateMelodyDisplay() {
     melodyDisplayEl.innerHTML = '';
+    const displayMode = displayModeSelect.value;
+    
     currentMelody.forEach((note, index) => {
         const noteEl = document.createElement('div');
         noteEl.className = 'note';
-        noteEl.textContent = midiToNoteName(note);
+        
+        // 表示モードに応じて内容を決定
+        let shouldHide = false;
+        if (!melodyRevealed) {
+            if (displayMode === 'none' && index >= currentIndex) {
+                shouldHide = true;
+            } else if (displayMode === 'first' && index > 0 && index >= currentIndex) {
+                shouldHide = true;
+            }
+        }
+        
+        if (shouldHide) {
+            noteEl.classList.add('hidden');
+            // 隠す場合はテキストを設定しない（CSSで?を表示）
+        } else {
+            const noteText = document.createElement('span');
+            noteText.className = 'note-text';
+            noteText.textContent = midiToNoteName(note);
+            noteEl.appendChild(noteText);
+        }
         
         if (index < currentIndex) {
             noteEl.classList.add('correct');
@@ -71,10 +92,17 @@ async function playMelody() {
     playBtn.disabled = false;
 }
 
+// メロディを表示する
+function showMelody() {
+    melodyRevealed = true;
+    updateMelodyDisplay();
+}
+
 // 新しいメロディを生成
 async function newMelody() {
     currentMelody = generateMelody();
     currentIndex = 0;
+    melodyRevealed = false; // 新しいメロディでリセット
     updateMelodyDisplay();
     completeMessageEl.textContent = '';
     feedbackEl.textContent = '';
@@ -87,6 +115,7 @@ async function newMelody() {
 // やり直し
 function reset() {
     currentIndex = 0;
+    melodyRevealed = false; // やり直し時もリセット
     updateMelodyDisplay();
     completeMessageEl.textContent = '';
     feedbackEl.textContent = '';

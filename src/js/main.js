@@ -29,13 +29,16 @@ let streakCount = 0;
 let isPlayingExample = false;
 let isLeftHandMode = false;
 let selectedNoteTypes = [...allNoteTypes]; // デフォルトは全ての音を使用（オクターブ無視）
+let melodyRevealed = false; // メロディが表示されているかどうか
 
 // DOM要素
 const statusEl = document.getElementById('status');
 const melodyDisplayEl = document.getElementById('melodyDisplay');
 const playBtn = document.getElementById('playBtn');
+const showMelodyBtn = document.getElementById('showMelodyBtn');
 const newMelodyBtn = document.getElementById('newMelodyBtn');
 const resetBtn = document.getElementById('resetBtn');
+const displayModeSelect = document.getElementById('displayMode');
 const feedbackEl = document.getElementById('feedback');
 const completeMessageEl = document.getElementById('completeMessage');
 const correctCountEl = document.getElementById('correctCount');
@@ -280,12 +283,19 @@ leftHandModeCheckbox.addEventListener('change', () => {
     }
 });
 
+// 表示モード変更時の処理
+displayModeSelect.addEventListener('change', () => {
+    melodyRevealed = false; // 表示モード変更時はリセット
+    updateMelodyDisplay();
+});
+
 // 鍵盤選択ボタンのイベントリスナー
 deselectAllKeysBtn.addEventListener('click', deselectAllKeys);
 applyScaleBtn.addEventListener('click', applyScale);
 
 // イベントリスナー
 playBtn.addEventListener('click', playMelody);
+showMelodyBtn.addEventListener('click', showMelody);
 newMelodyBtn.addEventListener('click', newMelody);
 resetBtn.addEventListener('click', reset);
 

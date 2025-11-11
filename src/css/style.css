@@ -10,6 +10,7 @@ body {
     min-height: 100vh;
     padding: 0;
     margin: 0;
+    overflow-x: hidden;
 }
 
 .container {
@@ -34,6 +35,10 @@ body {
     padding: 40px 20px;
     background: rgba(255, 255, 255, 0.95);
     overflow-y: auto;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    align-self: flex-start;
 }
 
 h1 {
@@ -264,11 +269,14 @@ h1 {
     
     .main-content {
         border-radius: 0;
+        margin: 0;
     }
     
     .sidebar {
         width: 100%;
         padding: 40px;
+        position: static;
+        height: auto;
     }
     
     .key-selection-controls {
@@ -388,6 +396,20 @@ h1 {
     color: #999;
 }
 
+.note.hidden {
+    background: #bbb;
+    color: white;
+    font-size: 2em;
+}
+
+.note.hidden::after {
+    content: '?';
+}
+
+.note.hidden .note-text {
+    display: none;
+}
+
 @keyframes pulse {
     0%, 100% { transform: scale(1); }
     50% { transform: scale(1.1); }
@@ -434,6 +456,11 @@ button:disabled {
 
 .btn-secondary {
     background: #9E9E9E;
+    color: white;
+}
+
+.btn-info {
+    background: #FF9800;
     color: white;
 }
 

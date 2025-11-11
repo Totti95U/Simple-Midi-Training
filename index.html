@@ -19,8 +19,8 @@
                 <div class="setting-group">
                     <label for="noteNotation">音名表記</label>
                     <select id="noteNotation">
-                        <option value="japanese">ドレミ</option>
                         <option value="english">CDE</option>
+                        <option value="japanese">ドレミ</option>
                     </select>
                 </div>
                 <div class="setting-group">
@@ -48,6 +48,7 @@
             
             <div class="controls">
                 <button class="btn-primary" id="playBtn" disabled>お手本を聴く</button>
+                <button class="btn-info" id="showMelodyBtn">メロディを見る</button>
                 <button class="btn-success" id="newMelodyBtn">新しいメロディ</button>
                 <button class="btn-secondary" id="resetBtn">やり直す</button>
             </div>
@@ -73,11 +74,19 @@
                 <div class="sidebar-settings">
                     <div class="setting-group">
                         <label for="noteCount">音の数</label>
-                        <input type="number" id="noteCount" min="2" max="12" value="4">
+                        <input type="number" id="noteCount" min="2" max="12" value="6">
                     </div>
                     <div class="setting-group">
                         <label for="intervalLimit">音程の幅（半音）</label>
                         <input type="number" id="intervalLimit" min="1" max="24" value="4">
+                    </div>
+                    <div class="setting-group">
+                        <label for="displayMode">表示モード</label>
+                        <select id="displayMode">
+                            <option value="first">最初の音だけ表示</option>
+                            <option value="none">全て隠す</option>
+                            <option value="all">全て表示</option>
+                        </select>
                     </div>
                 </div>
             </div>
