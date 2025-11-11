@@ -2,6 +2,12 @@
 const noteNamesJP = ['ド', 'ド#', 'レ', 'レ#', 'ミ', 'ファ', 'ファ#', 'ソ', 'ソ#', 'ラ', 'ラ#', 'シ'];
 const noteNamesEN = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 
+// 黒鍵の判定（半音階のインデックス）
+const blackKeys = [1, 3, 6, 8, 10]; // C#, D#, F#, G#, A#
+
+// 使用可能な音符のMIDIノート番号（C4-C5: 60-72）
+const allNotes = [60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72];
+
 // グローバル変数
 let midiAccess = null;
 let audioContext = null;
@@ -11,6 +17,7 @@ let correctCount = 0;
 let wrongCount = 0;
 let streakCount = 0;
 let isPlayingExample = false;
+let selectedKeys = [...allNotes]; // デフォルトは全ての鍵盤を使用
 
 // DOM要素
 const statusEl = document.getElementById('status');
@@ -27,10 +34,96 @@ const noteCountInput = document.getElementById('noteCount');
 const intervalLimitInput = document.getElementById('intervalLimit');
 const noteNotationSelect = document.getElementById('noteNotation');
 const instrumentSelect = document.getElementById('instrument');
+const keyCheckboxesContainer = document.getElementById('keyCheckboxes');
+const selectAllKeysBtn = document.getElementById('selectAllKeys');
+const selectWhiteKeysBtn = document.getElementById('selectWhiteKeys');
+const deselectAllKeysBtn = document.getElementById('deselectAllKeys');
 
 // Web Audio API初期化
 function initAudio() {
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+// 鍵盤選択UIを初期化
+function initKeySelection() {
+    keyCheckboxesContainer.innerHTML = '';
+    
+    allNotes.forEach(midiNote => {
+        const noteIndex = midiNote % 12;
+        const isBlackKey = blackKeys.includes(noteIndex);
+        
+        const item = document.createElement('div');
+        item.className = 'key-checkbox-item' + (isBlackKey ? ' black-key' : '');
+        
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `key-${midiNote}`;
+        checkbox.value = midiNote;
+        checkbox.checked = true;
+        
+        const label = document.createElement('label');
+        label.htmlFor = `key-${midiNote}`;
+        label.textContent = midiToNoteName(midiNote);
+        
+        checkbox.addEventListener('change', updateSelectedKeys);
+        
+        item.appendChild(checkbox);
+        item.appendChild(label);
+        item.addEventListener('click', (e) => {
+            if (e.target !== checkbox) {
+                checkbox.checked = !checkbox.checked;
+                updateSelectedKeys();
+            }
+        });
+        
+        keyCheckboxesContainer.appendChild(item);
+    });
+}
+
+// 選択された鍵盤を更新
+function updateSelectedKeys() {
+    selectedKeys = [];
+    allNotes.forEach(midiNote => {
+        const checkbox = document.getElementById(`key-${midiNote}`);
+        if (checkbox && checkbox.checked) {
+            selectedKeys.push(midiNote);
+        }
+    });
+    
+    // 選択された鍵盤が変わった場合、新しいメロディを生成（進行中でなければ）
+    if (currentIndex === 0 && selectedKeys.length > 0) {
+        newMelody();
+    }
+}
+
+// すべての鍵盤を選択
+function selectAllKeys() {
+    allNotes.forEach(midiNote => {
+        const checkbox = document.getElementById(`key-${midiNote}`);
+        if (checkbox) checkbox.checked = true;
+    });
+    updateSelectedKeys();
+}
+
+// 白鍵のみを選択
+function selectWhiteKeys() {
+    allNotes.forEach(midiNote => {
+        const checkbox = document.getElementById(`key-${midiNote}`);
+        const noteIndex = midiNote % 12;
+        if (checkbox) {
+            checkbox.checked = !blackKeys.includes(noteIndex);
+        }
+    });
+    updateSelectedKeys();
+}
+
+// すべての鍵盤を解除
+function deselectAllKeys() {
+    allNotes.forEach(midiNote => {
+        const checkbox = document.getElementById(`key-${midiNote}`);
+        if (checkbox) checkbox.checked = false;
+    });
+    updateSelectedKeys();
 }
 
 // MIDIノート番号を音名に変換
@@ -44,24 +137,28 @@ function midiToNoteName(midiNote) {
 
 // ランダムなメロディを生成（音程制限付き）
 function generateMelody() {
+    if (selectedKeys.length === 0) {
+        alert('少なくとも1つの鍵盤を選択してください');
+        return [];
+    }
+    
     const length = parseInt(noteCountInput.value);
     const intervalLimit = parseInt(intervalLimitInput.value);
     const melody = [];
-    const scale = [60, 62, 64, 65, 67, 69, 71, 72]; // C major scale (C4-C5)
     
     // 最初の音はランダム
-    let lastNote = scale[Math.floor(Math.random() * scale.length)];
+    let lastNote = selectedKeys[Math.floor(Math.random() * selectedKeys.length)];
     melody.push(lastNote);
     
     // 残りの音を生成
     for (let i = 1; i < length; i++) {
-        const possibleNotes = scale.filter(note => 
+        const possibleNotes = selectedKeys.filter(note => 
             Math.abs(note - lastNote) <= intervalLimit
         );
         
         if (possibleNotes.length === 0) {
             // 制限内に音がない場合は全体から選択
-            lastNote = scale[Math.floor(Math.random() * scale.length)];
+            lastNote = selectedKeys[Math.floor(Math.random() * selectedKeys.length)];
         } else {
             lastNote = possibleNotes[Math.floor(Math.random() * possibleNotes.length)];
         }
@@ -127,6 +224,11 @@ intervalLimitInput.addEventListener('change', () => {
 
 noteNotationSelect.addEventListener('change', updateMelodyDisplay);
 
+// 鍵盤選択ボタンのイベントリスナー
+selectAllKeysBtn.addEventListener('click', selectAllKeys);
+selectWhiteKeysBtn.addEventListener('click', selectWhiteKeys);
+deselectAllKeysBtn.addEventListener('click', deselectAllKeys);
+
 // イベントリスナー
 playBtn.addEventListener('click', playMelody);
 newMelodyBtn.addEventListener('click', newMelody);
@@ -136,6 +238,7 @@ resetBtn.addEventListener('click', reset);
 async function initialize() {
     initAudio();
     initMIDI();
+    initKeySelection(); // 鍵盤選択UIを初期化
     await loadPianoSample(); // ピアノサンプルを読み込む（完了を待つ）
     newMelody();
 }
