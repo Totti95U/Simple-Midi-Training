@@ -46,6 +46,7 @@ const wrongCountEl = document.getElementById('wrongCount');
 const streakCountEl = document.getElementById('streakCount');
 const noteCountInput = document.getElementById('noteCount');
 const intervalLimitInput = document.getElementById('intervalLimit');
+const playbackSpeedInput = document.getElementById('playbackSpeed');
 const noteNotationSelect = document.getElementById('noteNotation');
 const instrumentSelect = document.getElementById('instrument');
 const leftHandModeCheckbox = document.getElementById('leftHandMode');

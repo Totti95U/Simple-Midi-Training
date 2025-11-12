@@ -83,9 +83,11 @@ async function playMelody() {
     isPlayingExample = true;
     playBtn.disabled = true;
     
+    const playbackSpeed = parseInt(playbackSpeedInput.value) || 450;
+    
     for (let i = 0; i < currentMelody.length; i++) {
         playNote(currentMelody[i]);
-        await new Promise(resolve => setTimeout(resolve, 450));
+        await new Promise(resolve => setTimeout(resolve, playbackSpeed));
     }
     
     isPlayingExample = false;
